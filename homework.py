@@ -2,18 +2,6 @@ import datetime as dt
 
 
 class Record:
-    """
-    Class Record this class is used for records.
-
-    Attributes
-    ----------
-    amount : int
-
-    comment : str
-
-    date : dt.datetime.date
-        format data "%d.%m.%Y"
-    """
     def __init__(self,
                  amount: int,
                  comment: str,
@@ -27,32 +15,18 @@ class Record:
 
 
 class Calculator:
-    """
-    Class Calculator this class is used for writing records and
-    for calculating the values of records for 1 day and for the last 7 days.
-
-    Attributes
-    ----------
-    limit : int
-        the daily limit value set by the user
-    
-    Methods
-    -------
-    add_record()
-    """
     def __init__(self, limit: int):
         self.limit = limit
         self.records = []
 
-    def add_record(self, record):
-         """Append a record to the list"""
+    def add_record(self,record):
         self.records.append(record)
 
     def get_today_stats(self):
         """Calculates the amount value for today"""
         today_stat = 0
         for rec in self.records:
-            if rec.date == dt.datetime.now().date():
+            if rec.date == dt.datetime.today().date():
                 today_stat += rec.amount
         return today_stat
 
@@ -67,17 +41,6 @@ class Calculator:
 
 
 class CashCalculator(Calculator):
-    """
-    Class for calculating expenses for the last day and for the last 7 days. 
-    Returns the remaining limit in USD/Euro/RUB.
-
-    Attributes
-    ----------
-    limit : int
-        the daily limit value set by the user.
-
-    
-    """
     USD_RATE = float(50)
     EURO_RATE = float(80)
 
