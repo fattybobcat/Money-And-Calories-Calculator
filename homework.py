@@ -1,7 +1,23 @@
 import datetime as dt
 
+
 class Record:
-    def __init__(self, amount: int, comment: str, date : dt.datetime.date = dt.datetime.now().date()):
+    """
+    Class Record this class is used for records.
+
+    Attributes
+    ----------
+    amount : int
+
+    comment : str
+
+    date : dt.datetime.date
+        format data "%d.%m.%Y"
+    """
+    def __init__(self,
+                 amount: int,
+                 comment: str,
+                 date: dt.datetime.date = dt.datetime.now().date()):
         self.amount = amount
         self.comment = comment
         if type(date) == str:
@@ -11,36 +27,65 @@ class Record:
 
 
 class Calculator:
+    """
+    Class Calculator this class is used for writing records and
+    for calculating the values of records for 1 day and for the last 7 days.
+
+    Attributes
+    ----------
+    limit : int
+        the daily limit value set by the user
+    
+    Methods
+    -------
+    add_record()
+    """
     def __init__(self, limit: int):
         self.limit = limit
         self.records = []
 
-    def add_record(self,record):
+    def add_record(self, record):
+         """Append a record to the list"""
         self.records.append(record)
 
     def get_today_stats(self):
+        """Calculates the amount value for today"""
         today_stat = 0
         for rec in self.records:
             if rec.date == dt.datetime.now().date():
                 today_stat += rec.amount
         return today_stat
-    
+
     def get_week_stats(self):
+        """Calculates the amount value for the last 7 days"""
         week_stat = 0
-        seven_days = dt.datetime.now().date() - dt.timedelta(7)      
+        seven_days = dt.datetime.now().date() - dt.timedelta(7)
         for rec in self.records:
-            if  dt.datetime.now().date() >= rec.date >= seven_days:
+            if dt.datetime.now().date() >= rec.date >= seven_days:
                 week_stat += rec.amount
         return week_stat
 
 
 class CashCalculator(Calculator):
+    """
+    Class for calculating expenses for the last day and for the last 7 days. 
+    Returns the remaining limit in USD/Euro/RUB.
+
+    Attributes
+    ----------
+    limit : int
+        the daily limit value set by the user.
+
+    
+    """
     USD_RATE = float(50)
     EURO_RATE = float(80)
+
     def __init__(self, limit: int):
         super().__init__(limit)
 
-    def get_today_cash_remained(self,currency: str):
+    def get_today_cash_remained(self, currency: str):
+
         money = self.limit - self.get_today_stats()
         if money > 0:
             if currency == 'usd':
