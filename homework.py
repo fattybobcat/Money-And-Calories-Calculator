@@ -43,35 +43,23 @@ class Calculator:
 class CashCalculator(Calculator):
     USD_RATE = float(50)
     EURO_RATE = float(80)
-
+    RUB_RATE = 1
+    exchange_rate = {'usd':['USD_RATE', 'USD'] ,'eur':['EURO_RATE', 'Euro'],'rub':['RUB_RATE', 'руб']}
     def __init__(self, limit: int):
         super().__init__(limit)
 
     def get_today_cash_remained(self, currency: str):
-
         money = self.limit - self.get_today_stats()
+        rate_value, word_course = self.exchange_rate[currency]
+        rate_course=float(eval('self.'+rate_value))
+        exchanged_money = money / rate_course
         if money > 0:
-            if currency == 'usd':
-                usd_rest = money / self.USD_RATE
-                return 'На сегодня осталось {:.2f} USD'.format(usd_rest)
-            elif currency == 'eur':
-                eur_rest = money / self.EURO_RATE
-                return 'На сегодня осталось {:.2f} Euro'.format(eur_rest)
-            elif currency == 'rub':
-                return 'На сегодня осталось {:.2f} руб'.format(money)
+            return 'На сегодня осталось {:.2f} {}'.format(exchanged_money,word_course)
         elif money == 0:
             return 'Денег нет, держись'
         else:
-            if currency == 'usd':
-                usd_rest = money / self.USD_RATE
-                return 'Денег нет, держись: твой долг - {:.2f} USD'.format(abs(usd_rest))
-            elif currency == 'eur':
-                eur_rest = money / self.EURO_RATE
-                return 'Денег нет, держись: твой долг - {:.2f} Euro'.format(abs(eur_rest))
-            elif currency == 'rub':
-                return 'Денег нет, держись: твой долг - {:.2f} руб'.format(abs(money))
-
-
+            return 'Денег нет, держись: твой долг - {:.2f} {}'.format(abs(exchanged_money),word_course)
+       
 class CaloriesCalculator (Calculator):
     def get_calories_remained(self):
         calories = self.limit - self.get_today_stats()
