@@ -19,7 +19,7 @@ class Calculator:
         self.limit = limit
         self.records = []
 
-    def add_record(self,record):
+    def add_record(self, record):
         self.records.append(record)
 
     def get_today_stats(self):
@@ -44,22 +44,28 @@ class CashCalculator(Calculator):
     USD_RATE = float(50)
     EURO_RATE = float(80)
     RUB_RATE = 1
-    exchange_rate = {'usd':['USD_RATE', 'USD'] ,'eur':['EURO_RATE', 'Euro'],'rub':['RUB_RATE', 'руб']}
+    exchange_rate = {'usd': ['USD_RATE', 'USD'],
+                     'eur': ['EURO_RATE', 'Euro'],
+                     'rub': ['RUB_RATE', 'руб']}
+
     def __init__(self, limit: int):
         super().__init__(limit)
 
     def get_today_cash_remained(self, currency: str):
         money = self.limit - self.get_today_stats()
         rate_value, word_course = self.exchange_rate[currency]
-        rate_course=float(eval('self.'+rate_value))
+        rate_course = float(eval('self.' + rate_value))
         exchanged_money = money / rate_course
         if money > 0:
-            return 'На сегодня осталось {:.2f} {}'.format(exchanged_money,word_course)
+            return 'На сегодня осталось {:.2f} {}'.format(exchanged_money,
+                                                          word_course)
         elif money == 0:
             return 'Денег нет, держись'
         else:
-            return 'Денег нет, держись: твой долг - {:.2f} {}'.format(abs(exchanged_money),word_course)
-       
+            return 'Денег нет, держись: твой долг - {:.2f} {}'.format(abs(exchanged_money),
+                                                                      word_course)
+
+
 class CaloriesCalculator (Calculator):
     def get_calories_remained(self):
         calories = self.limit - self.get_today_stats()
